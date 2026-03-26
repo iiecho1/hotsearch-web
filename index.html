@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="聚合展示各平台每日热搜条目，支持微博、知乎、百度等30+平台">
+    <meta name="keywords" content="热搜,微博热搜,知乎热搜,百度热搜,实时热点">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>热搜聚合 - 各平台热搜展示</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>热搜聚合</h1>
+            <p>展示各平台每日热搜条目</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="platform-selector" aria-labelledby="platform-title">
+            <h2 id="platform-title">
+                <span class="icon">📱</span>
+                选择平台
+            </h2>
+            <div id="platform-buttons" class="platform-buttons" role="group" aria-label="平台选择">
+                <!-- 平台按钮将通过JavaScript动态生成 -->
+            </div>
+        </section>
+
+        <section class="date-selector" aria-labelledby="date-title">
+            <h2 id="date-title">
+                <span class="icon">📅</span>
+                选择日期
+            </h2>
+            <div class="date-controls">
+                <label for="date-picker" class="sr-only">选择日期</label>
+                <input type="date" id="date-picker" aria-describedby="date-hint">
+                <span id="date-hint" class="date-hint">只能查看过去90天内的数据</span>
+                <button id="load-hotsearch" type="button" aria-label="加载热搜数据">
+                    <span class="btn-text">加载热搜</span>
+                    <span class="btn-icon">🔄</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="hotsearch-display" aria-labelledby="hotsearch-title">
+            <h2 id="hotsearch-title">
+                <span class="icon">🔥</span>
+                <span id="current-platform-title">热搜条目</span>
+            </h2>
+            <div id="hotsearch-list" class="hotsearch-list" role="region" aria-live="polite">
+                <p class="placeholder">请选择平台和日期以查看热搜</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>数据来源：<a href="https://github.com/iiecho1/hot_searches_for_apps" target="_blank" rel="noopener noreferrer">GitHub - hot_searches_for_apps</a></p>
+        <p class="copyright">© 2024 热搜聚合</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

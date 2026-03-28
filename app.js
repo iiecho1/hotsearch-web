@@ -37,9 +37,7 @@ const platforms = {
     tech: [
         { name: 'CSDN', emoji: '💻' },
         { name: 'GitHub', emoji: '🐙' },
-        { name: 'IT之家', emoji: '🏠' },
-        { name: '掘金', emoji: '⛏️' },
-        { name: '虎嗅网', emoji: '🐅' }
+        { name: 'IT之家', emoji: '🏠' }
     ],
     // 视频/娱乐
     video: [
@@ -157,10 +155,8 @@ function initDatePicker() {
     // 设置为今天
     elements.datePicker.value = formattedDate;
     
-    // 限制只能选择过去90天
-    const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() - 90);
-    elements.datePicker.min = formatDate(minDate);
+    // 移除90天限制，允许选择任意历史日期
+    // 只设置最大值为今天
     elements.datePicker.max = formattedDate;
     
     // 更新提示文字
@@ -321,8 +317,8 @@ async function loadHotSearch() {
  */
 function getErrorMessage(status) {
     const messages = {
-        404: '未找到该日期的热搜数据',
-        403: '访问被拒绝，请稍后重试',
+        404: '所选日期暂无热搜记录，请选择其他日期',
+        403: '所选日期暂无热搜记录，请选择其他日期',
         500: '服务器错误，请稍后重试'
     };
     return messages[status] || '加载失败，请检查网络连接';

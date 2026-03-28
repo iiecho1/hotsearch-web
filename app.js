@@ -20,7 +20,8 @@ const platforms = {
         { name: 'V2EX', emoji: '⌨️' },
         { name: '虎扑', emoji: '🏀' },
         { name: '豆瓣', emoji: '🎬' },
-        { name: 'AcFun', emoji: '📺' }
+        { name: 'AcFun', emoji: '📺' },
+        { name: '百度贴吧', emoji: '💬' }
     ],
     // 新闻资讯
     news: [
@@ -37,7 +38,8 @@ const platforms = {
     tech: [
         { name: 'CSDN', emoji: '💻' },
         { name: 'GitHub', emoji: '🐙' },
-        { name: 'IT之家', emoji: '🏠' }
+        { name: 'IT之家', emoji: '🏠' },
+        { name: '36氪', emoji: '📰' }
     ],
     // 视频/娱乐
     video: [

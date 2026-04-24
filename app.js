@@ -52,8 +52,7 @@ const platforms = {
         { name: '少数派', emoji: '✌️' },
         { name: '懂球帝', emoji: '⚽' },
         { name: '国家地理', emoji: '🌍' },
-        { name: '历史上的今天', emoji: '📚' },
-        { name: '360doc', emoji: '📖' }
+        { name: '历史上的今天', emoji: '📚' }
     ]
 };
 
@@ -82,6 +81,7 @@ function init() {
     initDatePicker();
     initLoadButton();
     initKeyboardShortcuts();
+    initBackToTop();
     registerServiceWorker();
 }
 
@@ -359,9 +359,10 @@ function displayHotSearch(items) {
     const html = items.map((item, index) => {
         const rankClass = getRankClass(index);
         const rank = index + 1;
-        
+        const delay = Math.min(index * 30, 600);
+
         return `
-            <article class="hotsearch-item" data-rank="${rank}">
+            <article class="hotsearch-item" data-rank="${rank}" style="animation-delay:${delay}ms">
                 <span class="${rankClass}" aria-label="第${rank}名">${rank}</span>
                 <a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(item.title)}">
                     ${escapeHtml(item.title)}
@@ -436,6 +437,22 @@ function showError(message) {
             <button class="retry-btn" onclick="loadHotSearch()">重试</button>
         </div>
     `;
+}
+
+/**
+ * 初始化回到顶部按钮
+ */
+function initBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 300);
+    }, { passive: true });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
 /**

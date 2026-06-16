@@ -4,8 +4,8 @@
   "description": "聚合展示各平台每日热搜条目",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#667eea",
+  "background_color": "#faf8f5",
+  "theme_color": "#c2410c",
   "orientation": "portrait-primary",
   "icons": [
     {

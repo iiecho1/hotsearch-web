@@ -57,6 +57,7 @@ const state = {
   currentPlatform: null,
   isLoading: false,
   cache: new Map(),
+  pendingController: null,
 };
 
 const elements = {};
@@ -158,10 +159,10 @@ function updateDateHint() {
     elements.dateHint.textContent = '';
     return;
   }
-  const selected = new Date(elements.datePicker.value);
+  const [y, m, d] = elements.datePicker.value.split('-').map(Number);
+  const selected = new Date(y, m - 1, d); // 本地时区解析，避免 UTC 偏移差一天
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  selected.setHours(0, 0, 0, 0);
   const diff = Math.floor((today - selected) / 86400000);
 
   if (diff === 0) elements.dateHint.textContent = '今天';
@@ -217,6 +218,11 @@ async function loadHotSearch() {
     return;
   }
 
+  // 取消上一次未完成的请求，避免慢响应覆盖新选择
+  if (state.pendingController) state.pendingController.abort();
+  const controller = new AbortController();
+  state.pendingController = controller;
+
   setLoading(true);
 
   try {
@@ -225,7 +231,7 @@ async function loadHotSearch() {
     const filePath = `${platformPath}/${year}/${month}/${selectedDate}.md`;
     const url = `${CDN_BASE}/${filePath}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: controller.signal });
     if (!response.ok) throw new Error(getErrorMessage(response.status));
 
     const content = await response.text();
@@ -239,17 +245,18 @@ async function loadHotSearch() {
 
     displayHotSearch(items);
   } catch (error) {
+    if (error.name === 'AbortError') return; // 已发起新请求，交由新请求收尾
     console.error('加载热搜失败:', error);
     showError(error.message);
   } finally {
-    setLoading(false);
+    if (state.pendingController === controller) setLoading(false);
   }
 }
 
 function getErrorMessage(status) {
   const messages = {
     404: '所选日期暂无热搜记录，请选择其他日期',
-    403: '所选日期暂无热搜记录，请选择其他日期',
+    403: '数据源访问受限（403），请稍后重试',
     500: '服务器错误，请稍后重试',
   };
   return messages[status] || '加载失败，请检查网络连接';
@@ -260,7 +267,7 @@ function parseHotSearch(content) {
   const regex = /\+\s*\[(.*?)\]\((.*?)\)/g;
   let match;
   while ((match = regex.exec(content)) !== null) {
-    items.push({ title: match[1], link: match[2] });
+    items.push({ title: match[1].trim(), link: match[2] });
   }
   return items;
 }
